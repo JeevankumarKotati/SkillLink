@@ -39,6 +39,7 @@ describe("User Model", () => {
   })
 
   test("should enforce unique email constraint", async () => {
+    await User.init()
     await new User(validUserData).save()
     const duplicate = new User({ ...validUserData, name: "Another User" })
     await expect(duplicate.save()).rejects.toThrow()

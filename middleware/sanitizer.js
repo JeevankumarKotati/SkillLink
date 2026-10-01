@@ -1,4 +1,4 @@
-﻿const htmlEntities = {
+const htmlEntities = {
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
   "'": '&#x27;', '/': '&#x2F;', '`': '&#x60;', '=': '&#x3D;'
 };
@@ -60,12 +60,18 @@ const sanitizeObject = (obj, options = {}) => {
 
 const detectSqlInjection = (value) => {
   if (typeof value !== 'string') return false;
-  return sqlPatterns.some(pattern => pattern.test(value));
+  return sqlPatterns.some(pattern => {
+    pattern.lastIndex = 0;
+    return pattern.test(value);
+  });
 };
 
 const detectNoSqlInjection = (value) => {
   if (typeof value !== 'string') return false;
-  return noSqlPatterns.some(pattern => pattern.test(value));
+  return noSqlPatterns.some(pattern => {
+    pattern.lastIndex = 0;
+    return pattern.test(value);
+  });
 };
 
 const sanitizeRequest = (options = {}) => {

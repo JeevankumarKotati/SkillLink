@@ -113,7 +113,7 @@ exports.createBooking = async (req, res) => {
     })
 
     // Emit socket event to worker
-    if (req.app.io) {
+    if (req.app && req.app.io) {
       req.app.io.to(`user-${worker.user}`).emit("new-booking", {
         booking: booking.toObject(),
         service: service.toObject(),
@@ -231,7 +231,7 @@ exports.createBroadcastBooking = async (req, res) => {
         })
 
         // Emit socket event to worker
-        if (req.app.io) {
+        if (req.app && req.app.io) {
           req.app.io.to(`user-${worker.user}`).emit("new-booking", {
             booking: booking.toObject(),
             service: service.toObject(),
@@ -474,7 +474,7 @@ exports.cancelBooking = async (req, res) => {
         })
 
         // Emit socket event to worker
-        if (req.app.io) {
+        if (req.app && req.app.io) {
           req.app.io.to(`user-${worker.user._id}`).emit("booking-cancelled", {
             bookingId: booking._id,
             reason: reason || "No reason provided"
@@ -567,7 +567,7 @@ exports.acceptBooking = async (req, res) => {
             })
 
             // Emit socket event
-            if (req.app.io) {
+            if (req.app && req.app.io) {
               req.app.io.to(`user-${otherWorker.user._id}`).emit("booking-rejected", {
                 booking: otherBooking.toObject(),
                 reason: "accepted_by_another"
@@ -590,7 +590,7 @@ exports.acceptBooking = async (req, res) => {
     })
 
     // Emit socket event to customer
-    if (req.app.io) {
+    if (req.app && req.app.io) {
       req.app.io.to(`user-${booking.customer}`).emit("booking-accepted", {
         booking: booking.toObject()
       })
